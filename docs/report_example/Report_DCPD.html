@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FP simulation report</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  </head>
+  <body>
+    <section>
+      <h1>FP simulation report</h1>
+      <p> This is the report of the FP problem you just solved.</p>
+    </section>
+    <section>
+      <h2>Problem description</h2>
+      <p>The propagation of a polymerization front can be described by a thermo-chemical model based on two coupled reaction-diffusion equations expressed in terms of the temperature \( T \) and degree of cure \( \alpha \) as follows,</p>
+      <div id="eq:ge">
+        $$
+        \begin{equation}\label{eq:ge}
+          \left\{\begin{array}{l}
+            \kappa \nabla^2 T+\rho H_r \frac{\partial \alpha}{\partial t}=\rho C_p \frac{\partial T}{\partial t}, \\
+            \frac{\partial \alpha}{\partial t}= A \exp \left(-\frac{E}{R T}\right) g(\alpha), 
+          \end{array}\right.
+        \tag{1}
+        \end{equation}$$
+      </div>
+      <p> where the first equation describes heat diffusion, and the second equation describes the cure kinetics of the FP reaction.</p>
+      <p>\( g(\alpha) \) is the reaction model, which is chosen from the <em>kinetics_library</em> module as: </p>
+      <div id="eq:KM">
+        $$
+        \begin{equation}
+          g(\alpha)= (1-\alpha)^n \alpha^m \frac{1}{1+\exp \left[C\left(\alpha-\alpha_c\right)\right]},
+        \tag{2}
+        \end{equation}
+        $$
+      </div>
+      <p>The descriptions and values of the variables in <a href="#eq:ge">Eq. (1)</a> and <a href="#eq:KM">Eq. (2)</a> are shown below based on your input:</p>
+      <table id="tab:param">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\( \kappa \) \( \left(\frac{\mathrm{w}}{\mathrm{mK}}\right)\)</td>
+            <td>Thermal conductivity </td>
+            <td>0.150</td>
+          </tr>
+          <tr>
+            <td>\( \rho \) \( \left(\frac{\mathrm{kg}}{\mathrm{m}^3}\right) \)</td>
+            <td>Density </td>
+            <td>980.0</td>
+          </tr>
+          <tr>
+            <td>\( C_p \) \( \left(\frac{\mathrm{J}}{\mathrm{kg}\cdot K}\right) \)</td>
+            <td>Specific heat </td>
+            <td>1600.0</td>
+          </tr>
+          <tr>
+            <td>\( H_r \) \( \left(\frac{\mathrm{J}}{\mathrm{kg}}\right) \)</td>
+            <td>Total enthalpy of reaction </td>
+            <td>3.50e+05</td>
+          </tr>
+          <tr>
+            <td>A \( \left(s^{-1}\right) \)</td>
+            <td>Pre-exponential factor </td>
+            <td>8.55e+15</td>
+          </tr>
+          <tr>
+            <td>E \( \left(\frac{\mathrm{J}}{\mathrm{mol}}\right) \)</td>
+            <td>Activation energy </td>
+            <td>1.1075e+05</td>
+          </tr>
+          <tr>
+            <td>\( m \)</td>
+            <td>Order of reaction</td>
+            <td>0.770</td>
+          </tr>
+          <tr>
+            <td>\( n \)</td>
+            <td>Order of reaction</td>
+            <td>1.720</td>
+          </tr>
+          <tr>
+            <td>\( C \)</td>
+            <td>Diffusion constant</td>
+            <td>14.480</td>
+          </tr>
+          <tr>
+            <td>\( \alpha_c \)</td>
+            <td>Critical conversion constant</td>
+            <td>0.410</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>The 1D FEM simulation settings are shown below:</p>
+      <table id="tab:simSet">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\( T_0 \) \( \left(^oC \right) \)</td>
+            <td>Initial temperature </td>
+            <td>20.00</td>
+          </tr>
+          <tr>
+            <td>\( \alpha_0 \)</td>
+            <td>Initial degree of cure</td>
+            <td>0.010</td>
+          </tr>
+          <tr>
+            <td>\( T_{trig} \) \( \left(^oC \right) \)</td>
+            <td>Trigger temperature </td>
+            <td>236.6</td>
+          </tr>
+          <tr>
+            <td>\( t_{trig} \)</td>
+            <td>Duration of trigger (s)</td>
+            <td>1.00</td>
+          </tr>
+          <tr>
+            <td>\( x_{max} \) (m)</td>
+            <td>Length of domain   </td>
+            <td>1.00e-02</td>
+          </tr>
+          <tr>
+            <td>\( t_{end} \)  (s)</td>
+            <td>Time span of the simulation</td>
+            <td>10.0</td>
+          </tr>
+          <tr>
+            <td>\( \Delta t (s)\)</td>
+            <td> Time step </td>
+            <td>1.00e-03</td>
+          </tr>
+          <tr>
+            <td>\( \Delta x \) (m)</td>
+            <td>Element size </td>
+            <td>2.00e-05</td>
+          </tr>
+          <tr>
+            <td>output_t</td>
+            <td>Save frequency in time</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>output_x</td>
+            <td>Save frequency in space</td>
+            <td>1</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      <h3>Simulation results</h3>
+      <p>The evolution of temperature \(T \) and degree of cure \( \alpha \): </p>
+      <video controls width="400" height="300">
+        <source src="frontAnim_DCPD.mp4" type="video/mp4">
+      </video>
+      <p>The frontal position \( x_{fp}(t)\) is extracted as the location where \( \alpha = 0.5 \): </p>
+      <img src="frontPos_DCPD.png" alt="frontal position" width="400" height="300">
+      <figcaption><span class="fig-label">Fig. 1:</span> The frontal position vs time.</figcaption>      <p>The front velocity is obtained by linear regression of the front position vs time curve, and the value is \( V_{fp} = 1.5149 \) (mm/s).</p>
+      <p>The evolution of degree of cure and temperature at the points \( x = 2.00 \) (mm), \( x = 5.00 \) (mm) are shown below,</p>
+      <img src="evolu_DCPD.png" alt="evolution" width="600" height="225">
+      <figcaption><span class="fig-label">Fig. 2:</span> Evolution of degree of cure and temperature at specified points.</figcaption>    </section>
+  </body>
+<article>
+	<h4>Geubelle Research Group</h4>
+	<ul>
+		<li>Qibang Liu - <a href="mailto:qibang@illinois.edu">qibang@illinois.edu</a></li>
+		<li>Michael Zakoworotny - <a href="mailto:mjz7@illinois.edu">mjz7@illinois.edu</a></li>
+		<li>Philippe Geubelle - <a href="mailto:geubelle@illinois.edu">geubelle@illinois.edu</a></li>
+		<li>Aditya Kumar - <a href="mailto:aditya.kumar@ce.gatech.edu">aditya.kumar@ce.gatech.edu</a></li>
+	</ul>
+</article>
+<footer>
+	<small>&copy; 2023 UIUC. All Rights Reserved.</small>
+</footer>
+</html>
