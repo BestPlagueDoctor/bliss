@@ -220,8 +220,8 @@ class FP_solver():
         # boundary conditions after thermal trigger removed (adiabatic)
         bcs_adiab = []
 
-        atemp = Expression('x[0] < 0 ? 1.0 : (x[0] < 0.005 ? 0.0 : 1.0)', domain=mesh, degree=1)
-        self.A *= atemp
+        #atemp = Expression('x[0] < 0 ? 1.0 : (x[0] < 0.005 ? 0.0 : 1.0)', domain=mesh, degree=1)
+        #self.A *= atemp
 
         # Apply initial temperature and degree of cure
         T_init = Constant(self.T0)

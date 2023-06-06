@@ -48,7 +48,7 @@ solver = FP_solver(kr, rhor, Cpr, Hr, A_, Er,
                    ptd_model, T0, alpha0, L=L, h_x=2e-5)
 
 # Run the solver until 10 s
-t_end = 60
+t_end = 10
 results_data = solver.solve(
     t_end, outputFreq_t=10, outputFreq_x=1)
 
