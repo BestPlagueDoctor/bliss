@@ -168,13 +168,13 @@ class FP_solver():
         """
 
         # Create a 1D mesh of length L with number of divisions nel_x
-        mesh = IntervalMesh(comm, self.nel_x, 0.0-0.005, self.L-0.005)
+        mesh = IntervalMesh(comm, self.nel_x, 0.0, self.L-0.005)
 
         # Define the left and right boundaries of domain
         left = CompiledSubDomain(
-            "near(x[0], side, tol) && on_boundary", side=0.0-0.005, tol=1e-7)
+            "near(x[0], side, tol) && on_boundary", side=0.0, tol=1e-7)
         right = CompiledSubDomain(
-            "near(x[0], side, tol) && on_boundary", side=self.L-0.005, tol=1e-7)
+            "near(x[0], side, tol) && on_boundary", side=self.L, tol=1e-7)
         facets = MeshFunction("size_t", mesh, mesh.topology().dim()-1, 0)
         facets.set_all(0)
         left.mark(facets, 1)

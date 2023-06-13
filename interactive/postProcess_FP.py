@@ -347,7 +347,7 @@ class Post_process():
             f.write('          <tr>\n')
             f.write('            <td>A \\( \\left(s^{-1}\\right) \\)</td>\n')
             f.write('            <td>Pre-exponential factor </td>\n')
-            f.write('            <td>%.2e</td>\n'%(self.fpSolver.A))
+#            f.write('            <td>%.2e</td>\n'%(self.fpSolver.A))
             f.write('          </tr>\n')
             f.write('          <tr>\n')
             f.write('            <td>E \\( \\left(\\frac{\\mathrm{J}}{\\mathrm{mol}}\\right) \\)</td>\n')
