@@ -33,7 +33,7 @@ class FP_solver():
 
     QUAD_DEG = 2  # degree of quadrature
 
-    def __init__(self, k, rho, Cp, H, A, E, kinetics_model, T0, alpha0, x_gs, x_ge, hl, T_trig=None, t_trig=1, L=0.015, dt=1e-3, h_x=1e-5):
+    def __init__(self, k, rho, Cp, H, A, E, kinetics_model, T0, alpha0, x_gs, x_ge, hl, T_trig=None, t_trig=1, L=0.03, dt=1e-3, h_x=1e-5):
         """
         Initializes the FP solvers using the supplied parameters
 
@@ -79,7 +79,7 @@ class FP_solver():
         self.E = E
         self.hl = hl
         self.x_ge = x_ge
-        self.x_gs = 0
+        self.x_gs = x_gs
 
         self.kinetics_model = kinetics_model
 
@@ -171,24 +171,24 @@ class FP_solver():
         """
 
         # need to adjust gapsize manually for now
-        gapsize = self.x_ge
-        leftbound = 0 - ((self.L - gapsize) / 2)
-        rightbound = 0 + ((self.L - gapsize) / 2) + gapsize
+        #gapsize = self.x_ge
+        #leftbound = 0 - ((self.L - gapsize) / 2)
+        #rightbound = 0 + ((self.L - gapsize) / 2) + gapsize
 
         # Create a 1D mesh of length L with number of divisions nel_x
-        mesh = IntervalMesh(comm, self.nel_x, leftbound, rightbound)
-        #mesh = IntervalMesh(comm, self.nel_x, 0, self.L)
+        #mesh = IntervalMesh(comm, self.nel_x, leftbound, rightbound)
+        mesh = IntervalMesh(comm, self.nel_x, 0, self.L)
 
 
         # Define the left and right boundaries of domain
-        left = CompiledSubDomain(
-            "near(x[0], side, tol) && on_boundary", side=leftbound, tol=1e-7)
-        right = CompiledSubDomain(
-            "near(x[0], side, tol) && on_boundary", side=rightbound, tol=1e-7)
         #left = CompiledSubDomain(
-        #    "near(x[0], side, tol) && on_boundary", side=0, tol=1e-7)
+        #    "near(x[0], side, tol) && on_boundary", side=leftbound, tol=1e-7)
         #right = CompiledSubDomain(
-        #    "near(x[0], side, tol) && on_boundary", side=self.L, tol=1e-7)
+        #    "near(x[0], side, tol) && on_boundary", side=rightbound, tol=1e-7)
+        left = CompiledSubDomain(
+            "near(x[0], side, tol) && on_boundary", side=0, tol=1e-7)
+        right = CompiledSubDomain(
+            "near(x[0], side, tol) && on_boundary", side=self.L, tol=1e-7)
         facets = MeshFunction("size_t", mesh, mesh.topology().dim()-1, 0)
         facets.set_all(0)
         left.mark(facets, 1)
@@ -234,10 +234,10 @@ class FP_solver():
         # boundary conditions after thermal trigger removed (adiabatic)
         bcs_adiab = []
 
-        atemp = Expression('x[0] < x_gs ? 1.0 : (x[0] < x_ge ? 0.0 : 1.0)', domain=mesh, degree=1, x_gs=self.x_gs, x_ge=self.x_ge)
-        self.A *= atemp
-        htemp = Expression('x[0] < x_gs ? 0.0 : (x[0] < x_ge ? 1.0 : 0.0)', domain=mesh, degree=1, x_gs=self.x_gs, x_ge=self.x_ge)
-        self.hl *= htemp
+        #atemp = Expression('x[0] < x_gs ? 1.0 : (x[0] < x_ge+x_ge ? 0.0 : 1.0)', domain=mesh, degree=1, x_gs=self.x_gs, x_ge=self.x_ge)
+        #self.A *= atemp
+        #htemp = Expression('x[0] < x_gs ? 0.0 : (x[0] < x_ge ? 1.0 : 0.0)', domain=mesh, degree=1, x_gs=self.x_gs, x_ge=self.x_ge)
+        #self.hl *= htemp
 
         # Apply initial temperature and degree of cure
         T_init = Constant(self.T0)
@@ -250,8 +250,8 @@ class FP_solver():
         # Define variational problem for solving for temperature
         dt = Constant(self.delta_t)
         F_T = self.rho*self.Cp*w*T*dx - self.rho*self.Cp*w*T_n*dx + dt*self.k*dot(grad(w), grad(T))*dx \
-                - self.rho*self.H*w*alpha_*dx + self.rho*self.H*w*alpha_n*dx + self.hl*dt*1*(T-self.T0)*w*dx
-        #        - self.rho*self.H*w*alpha_*dx + self.rho*self.H*w*alpha_n*dx
+                - self.rho*self.H*w*alpha_*dx + self.rho*self.H*w*alpha_n*dx
+        #       - self.rho*self.H*w*alpha_*dx + self.rho*self.H*w*alpha_n*dx + self.hl*dt*1*(T-self.T0)*w*dx
 
         # Define solver for problem with thermal trigger
         problem_T_trig = LinearVariationalProblem(lhs(F_T), rhs(

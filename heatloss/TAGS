@@ -1,41 +1,0 @@
-
-kinetics_library.py,394
-class Kinetics_Model(13,336
-    def __init__(18,420
-    def eval(33,947
-class First_Order(37,989
-    def __init__(46,1198
-    def eval(57,1541
-class Nth_Order(68,1777
-    def __init__(77,1984
-    def eval(96,2615
-class Prout_Tompkins(107,2861
-    def __init__(117,3089
-    def eval(143,4066
-class Prout_Tompkins_Diffusion(154,4336
-    def __init__(164,4633
-    def eval(215,6477
-
-postProcess_FP.py,266
-class Post_process(18,534
-    def __init__(25,774
-    def computeFrontSpeed(72,2464
-    def frontAnimation(138,5361
-    def evoluAtPts(176,6913
-    def plotT_peak(228,9572
-    def generateReport(260,10838
-def saveResults(453,22081
-def loadResults(470,22568
-
-solver_FP.py,205
-class FP_solver(28,723
-    def __init__(36,854
-    def printParallel(105,3003
-    def setSystemParameters(112,3147
-    def local_project(141,4163
-    def setupSolver(165,4950
-    def solve(268,9862
-
-heatloss.py,0
-
-example_DCPD.py,0
