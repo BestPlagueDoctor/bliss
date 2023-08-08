@@ -1,4 +1,3 @@
-print("OBXNOSIOUS MWESAGSESA!!!!!!!!!!!!!!!!!!!!!!")
 # Geubelle research group
 # Authors:  Qibang Liu (qibang@illinois.edu)
 #           Michael Zakoworotny (mjz7@illinois.edu)
